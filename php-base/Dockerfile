@@ -85,7 +85,7 @@ RUN (echo "deb http://packages.cloud.google.com/apt ${RUNTIME_DISTRIBUTION} main
     /bin/bash /build-scripts/dump_php_versions.sh && \
     /bin/bash /build-scripts/apt-cleanup.sh
 
-EXPOSE 8080
+EXPOSE 5000
 
 # Lock down the web directories
 RUN mkdir -p $APP_DIR $UPLOAD_DIR $SESSION_SAVE_PATH \
