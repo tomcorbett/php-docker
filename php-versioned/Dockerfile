@@ -14,9 +14,9 @@
 
 # Dockerfile for PHP 5.6/7.0/7.1 using nginx as the webserver.
 
-FROM ${PHP_BASE_IMAGE}
+FROM registry.gitlab.com/reeta-inc/php-docker/php-base
 
-ARG PHP_VERSION=7.1
+ARG PHP_VERSION=7.2
 
 RUN /bin/bash /build-scripts/install_php.sh && \
     /bin/bash /build-scripts/install_composer.sh && \
