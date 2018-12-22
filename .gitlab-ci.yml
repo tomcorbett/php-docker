@@ -1,0 +1,43 @@
+stages:
+  - build_base
+  - build_php
+
+image: docker:latest
+
+services:
+  - docker:dind
+
+before_script:
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+
+build-master-base:
+  stage: build_base
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE/php-base" php-base
+    - docker push "$CI_REGISTRY_IMAGE/php-base"
+  only:
+    - master
+
+build-base:
+  stage: build_base
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG/php-base" php-base
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG/php-base"
+  except:
+    - master
+
+build-master-php:
+  stage: build_php
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE/php" --build-arg PHP_VERSION=7.2 php-versioned
+    - docker push "$CI_REGISTRY_IMAGE/php"
+  only:
+    - master
+
+build-php:
+  stage: build_php
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG/php" --build-arg PHP_VERSION=7.2 php-versioned
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG/php"
+  except:
+    - master
